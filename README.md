@@ -1,5 +1,5 @@
 ## The Zen Zepplins
-It's for the CS2340 Project Team 14, The Zen Zepplins for the 2018 Spring semester.
+This is the repositoty for the CS2340 Project of Team 14, The Zen Zepplins for the 2018 Spring semester.
 
    Member             | Email + Phone
 ----------------------|-----------------------------------
