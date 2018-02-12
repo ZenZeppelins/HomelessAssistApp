@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "770471208818",
+    "firebase_url": "https://homelessassistapp.firebaseio.com",
+    "project_id": "homelessassistapp",
+    "storage_bucket": "homelessassistapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770471208818:android:11b655b13255d007",
+        "android_client_info": {
+          "package_name": "zepplins.zen.homelessassist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "770471208818-tg9800vrtam8s4dmuou24oh321fg4irm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCHC4m-TIWowqwr8HVP7WxKLFrbf4XnQU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
