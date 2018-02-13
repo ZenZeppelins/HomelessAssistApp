@@ -35,6 +35,21 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_name"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -55,7 +70,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
                     android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
@@ -69,8 +83,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Register"
+                android:onClick="onRegisterClicked"
+                android:text="@string/registerButton"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/email_sign_in_button4"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="onCancelClicked"
+                android:text="@string/cancelButton"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/registerFailed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerFailed"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="invisible" />
 
         </LinearLayout>
     </ScrollView>
