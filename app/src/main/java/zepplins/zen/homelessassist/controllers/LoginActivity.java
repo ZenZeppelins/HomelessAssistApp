@@ -3,6 +3,8 @@ package zepplins.zen.homelessassist.controllers;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,8 +21,26 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.initial_view);
+        Button logIn = (Button) findViewById(R.id.logInButton);
+        Button register = (Button) findViewById(R.id.registerButton);
+
+        logIn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //go to log in view
+                setContentView(R.layout.login);
+            }
+        });
+
+        register.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //go to register view
+                setContentView(R.layout.register);
+            }
+        });
     }
+
+
 
     //Sign a user into Firebase
     public void signInUser(String email, String password) {
