@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -15,8 +16,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import org.w3c.dom.Text;
 
@@ -29,6 +28,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.initial_view);
+
+
     }
 
     public void onGoToLogIn(View view) {
@@ -37,6 +38,12 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     public void onGoToRegister(View view) {
         setContentView(R.layout.register);
+        //Set options in the registration spinner
+        Spinner spinner = (Spinner) findViewById(R.id.accountTypeSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.account_type, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
     public void onCancelClicked(View view) {
@@ -49,14 +56,14 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         TextView name = (TextView) findViewById(R.id.name);
         Spinner accountType = (Spinner) findViewById(R.id.accountTypeSpinner);
         TextView accountCode = (TextView) findViewById(R.id.accountCode);
-        registerUser(email.getText().toString(), email.getText().toString(), name.getText().toString(),
+        registerUser(email.getText().toString(), password.getText().toString(), name.getText().toString(),
                 accountType.getSelectedItem().toString(), accountCode.getText().toString());
     }
 
     public void onSignInClicked(View view) {
         TextView email = (TextView) findViewById(R.id.email);
         TextView password = (TextView) findViewById(R.id.password);
-        signInUser(email.getText().toString(), email.getText().toString());
+        signInUser(email.getText().toString(), password.getText().toString());
     }
 
     //Sign a user into Firebase
@@ -79,10 +86,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     //Register the user on Firebase
-    public void registerUser(String email, String password, String name, String _userType, String _accountCode) {
+    public void registerUser(String _email, String password, String name, String _userType, String _accountCode) {
         //final necessary to be referenced by internal class
         final FirebaseAuth auth = Model.getInstance().getAuthenticator();
         final String displayName = name;
+        final String email = _email;
         final String userType = _userType;
         final String accountCode = _accountCode;
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
@@ -91,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Model m = Model.getInstance();
                 if (task.isSuccessful() && m.validateRegistration(userType, accountCode)) {
-                    m.setUserDetails(displayName, userType);
+                    m.setUserDetails(email, displayName, userType);
                     Intent i = new Intent(getApplicationContext(), SheltersActivity.class);
                     startActivity(i);
                 } else {

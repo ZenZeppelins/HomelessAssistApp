@@ -24,9 +24,9 @@ public class SheltersActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Model.getInstance().getAuthenticator().signOut();
                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
-                Model.getInstance().getAuthenticator().signOut();
             }
         });
     }

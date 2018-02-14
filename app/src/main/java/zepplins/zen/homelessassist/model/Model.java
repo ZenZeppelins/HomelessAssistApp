@@ -7,6 +7,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import zepplins.zen.homelessassist.controllers.SheltersActivity;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Created by mayhul on 2/11/18.
@@ -17,11 +23,13 @@ public class Model {
     public static Model getInstance() { return _instance; }
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     private final String adminCode = "adminsOnly";
-    private final String employeCode = "employeesOnly";
+    private final String employeeCode = "employeesOnly";
 
     public Model() {
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public FirebaseAuth getAuthenticator() {
@@ -38,18 +46,25 @@ public class Model {
         if (user.equals("Admin") && code.equals(adminCode)) {
             return true;
         }
-        if (user.equals("Shelter Employee") && code.equals(employeCode)) {
+        if (user.equals("Shelter Employee") && code.equals(employeeCode)) {
             return true;
         }
         return false;
     }
 
-    public void setUserDetails(String displayName, String userType) {
+    public void setUserDetails(String email, String displayName, String userType) {
         FirebaseUser user = mAuth.getCurrentUser();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(displayName)
                 .build();
-        //set user type here
+        //Add userType to database
+        Map<String, String> userData = new HashMap<>();
+        userData.put("email", email);
+        userData.put("userType", userType);
+        String key = mDatabase.child("users").push().getKey();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/users/" + key, userData);
+        mDatabase.updateChildren(childUpdates);
     }
 }
 
