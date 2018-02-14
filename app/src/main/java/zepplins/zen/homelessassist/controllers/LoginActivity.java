@@ -45,13 +45,13 @@ public class LoginActivity extends AppCompatActivity {
         TextView email = (TextView) findViewById(R.id.email);
         TextView password = (TextView) findViewById(R.id.password);
         TextView name = (TextView) findViewById(R.id.name);
-        registerUser(email.getText().toString(), email.getText().toString(), name.getText().toString());
+        registerUser(email.getText().toString(), password.getText().toString(), name.getText().toString());
     }
 
     public void onSignInClicked(View view) {
         TextView email = (TextView) findViewById(R.id.email);
         TextView password = (TextView) findViewById(R.id.password);
-        signInUser(email.getText().toString(), email.getText().toString());
+        signInUser(email.getText().toString(), password.getText().toString());
     }
 
     //Sign a user into Firebase
