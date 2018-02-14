@@ -6,9 +6,15 @@
     <string name="cancelButton">Cancel</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_name">Your Name</string>
+    <string name="prompt_code">Account Code</string>
     <string name="prompt_password">Password</string>
     <string name="title_activity_login">Log In</string>
     <string name="logInFailed">The log in failed!</string>
     <string name="registerFailed">The registration failed!</string>
     <string name="title_activity_shelters">SheltersActivity</string>
+    <string-array name="account_type">
+        <item>User</item>
+        <item>Admin</item>
+        <item>Shelter Employee</item>
+    </string-array>
 </resources>

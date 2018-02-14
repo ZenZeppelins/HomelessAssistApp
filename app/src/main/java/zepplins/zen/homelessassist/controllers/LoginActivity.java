@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +23,7 @@ import org.w3c.dom.Text;
 import zepplins.zen.homelessassist.R;
 import zepplins.zen.homelessassist.model.Model;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,10 @@ public class LoginActivity extends AppCompatActivity {
         TextView email = (TextView) findViewById(R.id.email);
         TextView password = (TextView) findViewById(R.id.password);
         TextView name = (TextView) findViewById(R.id.name);
-        registerUser(email.getText().toString(), email.getText().toString(), name.getText().toString());
+        Spinner accountType = (Spinner) findViewById(R.id.accountTypeSpinner);
+        TextView accountCode = (TextView) findViewById(R.id.accountCode);
+        registerUser(email.getText().toString(), email.getText().toString(), name.getText().toString(),
+                accountType.getSelectedItem().toString(), accountCode.getText().toString());
     }
 
     public void onSignInClicked(View view) {
@@ -74,19 +79,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //Register the user on Firebase
-    public void registerUser(String email, String password, String name) {
+    public void registerUser(String email, String password, String name, String _userType, String _accountCode) {
         //final necessary to be referenced by internal class
         final FirebaseAuth auth = Model.getInstance().getAuthenticator();
         final String displayName = name;
+        final String userType = _userType;
+        final String accountCode = _accountCode;
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
                 new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUser user = auth.getCurrentUser();
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(displayName)
-                            .build();
+                Model m = Model.getInstance();
+                if (task.isSuccessful() && m.validateRegistration(userType, accountCode)) {
+                    m.setUserDetails(displayName, userType);
                     Intent i = new Intent(getApplicationContext(), SheltersActivity.class);
                     startActivity(i);
                 } else {
@@ -96,6 +101,20 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        View codeEntry = findViewById(R.id.accountCode);
+        if (view == null || pos == 0) {
+            codeEntry.setVisibility(View.GONE);
+        } else {
+            codeEntry.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        onItemSelected(parent, null, 0, 0);
     }
 
 }
