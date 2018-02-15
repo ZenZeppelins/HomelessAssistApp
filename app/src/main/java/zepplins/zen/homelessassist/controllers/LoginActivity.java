@@ -56,6 +56,10 @@ public class LoginActivity extends AppCompatActivity {
 
     //Sign a user into Firebase
     public void signInUser(String email, String password) {
+        if (email == null || password == null || email.length() == 0 || password.length() == 0) {
+            failedSignIn();
+            return;
+        }
         FirebaseAuth auth = Model.getInstance().getAuthenticator();
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this,
                 new OnCompleteListener<AuthResult>() {
@@ -66,8 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(i);
                 } else {
                     Log.d("Log In", task.getException().toString());
-                    TextView failed = (TextView) findViewById(R.id.logInFailed);
-                    failed.setVisibility(TextView.VISIBLE);
+                    failedSignIn();
                 }
             }
         });
@@ -75,6 +78,10 @@ public class LoginActivity extends AppCompatActivity {
 
     //Register the user on Firebase
     public void registerUser(String email, String password, String name) {
+        if (email == null || password == null || email.length() == 0 || password.length() == 0) {
+            failedRegistration();
+            return;
+        }
         //final necessary to be referenced by internal class
         final FirebaseAuth auth = Model.getInstance().getAuthenticator();
         final String displayName = name;
@@ -91,11 +98,22 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(i);
                 } else {
                     Log.d("Log In", task.getException().toString());
-                    TextView failed = (TextView) findViewById(R.id.registerFailed);
-                    failed.setVisibility(TextView.VISIBLE);
+                    failedRegistration();
                 }
             }
         });
+    }
+
+    //What to do when a registration fails
+    private void failedRegistration() {
+        TextView failed = (TextView) findViewById(R.id.registerFailed);
+        failed.setVisibility(TextView.VISIBLE);
+    }
+
+    //What to do when a log in fails
+    private void failedSignIn() {
+        TextView failed = (TextView) findViewById(R.id.logInFailed);
+        failed.setVisibility(TextView.VISIBLE);
     }
 
 }
