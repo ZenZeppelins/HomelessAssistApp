@@ -22,7 +22,7 @@ import org.w3c.dom.Text;
 import zepplins.zen.homelessassist.R;
 import zepplins.zen.homelessassist.model.Model;
 
-public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,24 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 R.array.account_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        //Set listeners for spinner
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int pos, long id) {
+                View codeEntry = findViewById(R.id.accountCode);
+                if (selectedItemView == null || pos == 0) {
+                    codeEntry.setVisibility(View.GONE);
+                } else {
+                    codeEntry.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                onItemSelected(parentView, null, 0, 0);
+            }
+        });
     }
 
     public void onCancelClicked(View view) {
@@ -109,20 +127,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 }
             }
         });
-    }
-
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        View codeEntry = findViewById(R.id.accountCode);
-        if (view == null || pos == 0) {
-            codeEntry.setVisibility(View.GONE);
-        } else {
-            codeEntry.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        onItemSelected(parent, null, 0, 0);
     }
 
 }
