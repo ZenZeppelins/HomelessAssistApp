@@ -1,16 +1,23 @@
 package zepplins.zen.homelessassist.model;
 
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import zepplins.zen.homelessassist.controllers.SheltersActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -19,17 +26,26 @@ import java.util.Map;
  */
 
 public class Model {
-    private static final Model _instance = new Model();
-    public static Model getInstance() { return _instance; }
+    private static Model _instance;
+
+    public static Model getInstance() {
+        if (_instance == null) {
+            _instance = new Model();
+        }
+        return _instance;
+    }
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private List<Shelter> shelters;
     private final String adminCode = "adminsOnly";
     private final String employeeCode = "employeesOnly";
 
-    public Model() {
+    private Model() {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        shelters = new LinkedList<>();
+        loadShelters();
     }
 
     public FirebaseAuth getAuthenticator() {
@@ -65,6 +81,24 @@ public class Model {
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/users/" + key, userData);
         mDatabase.updateChildren(childUpdates);
+    }
+
+    public void loadShelters() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> shelterList = dataSnapshot.child("shelters").getChildren();
+                for (DataSnapshot shelter : shelterList) {
+                    Shelter newShelter = shelter.getValue(Shelter.class);
+                    shelters.add(newShelter);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Database", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
     }
 }
 
