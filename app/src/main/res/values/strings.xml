@@ -17,4 +17,13 @@
         <item>Admin</item>
         <item>Shelter Employee</item>
     </string-array>
+
+    <string name="shelterName">Shelter: %1$s</string>
+    <string name="shelterRestrictions">Restrictions: %1$s</string>
+    <string name="shelterLongitude">Longitude: %1$s</string>
+    <string name="shelterLatitude">Latitude: %1$s</string>
+    <string name="shelterAddress">Address: %1$s</string>
+    <string name="shelterPhone">Phone Number: %1$s</string>
+    <string name="shelterSpecialNotes">Special Notes: %1$s</string>
+
 </resources>

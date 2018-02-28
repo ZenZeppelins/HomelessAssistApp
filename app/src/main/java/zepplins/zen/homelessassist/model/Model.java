@@ -38,9 +38,11 @@ public class Model {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private List<Shelter> shelters;
+    //These are the codes required to register as an admin or an employee
     private final String adminCode = "adminsOnly";
     private final String employeeCode = "employeesOnly";
 
+    //When Model is created, Firebase is instantiated and the shelters are acquired from the DB
     private Model() {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -48,10 +50,15 @@ public class Model {
         loadShelters();
     }
 
+    public List<Shelter> getShelters() {
+        return shelters;
+    }
+
     public FirebaseAuth getAuthenticator() {
         return mAuth;
     }
 
+    //This method checks if the user is allowed to register as a admin/employee
     public boolean validateRegistration(String user, String code) {
         if (user == null || code == null) {
             return false;
@@ -70,6 +77,7 @@ public class Model {
 
     public void setUserDetails(String email, String displayName, String userType) {
         FirebaseUser user = mAuth.getCurrentUser();
+        //Set the user's name in Firebase's DB
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(displayName)
                 .build();
@@ -83,7 +91,8 @@ public class Model {
         mDatabase.updateChildren(childUpdates);
     }
 
-    public void loadShelters() {
+    private void loadShelters() {
+        //Get shelters from Firebase DB and put them in shelters
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -16,8 +15,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
 
 import zepplins.zen.homelessassist.R;
 import zepplins.zen.homelessassist.model.Model;
@@ -28,8 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.initial_view);
-
-
     }
 
     public void onGoToLogIn(View view) {
@@ -46,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
         //Set listeners for spinner
+        //When Admin or Employee is selected, show the TextView for the account code
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int pos, long id) {
@@ -123,6 +119,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Model m = Model.getInstance();
+                //Check that the user is allowed to register as that userType
                 if (task.isSuccessful() && m.validateRegistration(userType, accountCode)) {
                     m.setUserDetails(email, displayName, userType);
                     Intent i = new Intent(getApplicationContext(), SheltersActivity.class);
