@@ -9,6 +9,7 @@ public class Shelter {
     private String shelterName;
     private String specialNotes;
     private String phoneNumber;
+    private int capacity;
 
     public Shelter() {
 
@@ -68,5 +69,13 @@ public class Shelter {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }

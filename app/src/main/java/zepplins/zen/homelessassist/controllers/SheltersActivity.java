@@ -87,6 +87,9 @@ public class SheltersActivity extends AppCompatActivity {
         TextView text = (TextView) findViewById(R.id.shelterName);
         text.setText(getString(R.string.shelterName, shelter.getShelterName()));
 
+        text = (TextView) findViewById(R.id.shelterCapacity);
+        text.setText(getString(R.string.shelterCapacity, shelter.getCapacity()));
+
         text = (TextView) findViewById(R.id.shelterRestrictions);
         text.setText(getString(R.string.shelterRestrictions, shelter.getRestrictions()));
 
