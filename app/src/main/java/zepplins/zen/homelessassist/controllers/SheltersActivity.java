@@ -30,7 +30,7 @@ public class SheltersActivity extends AppCompatActivity {
         createShelterView();
     }
 
-    //This creates log out button and loads shelter list
+    //This creates the log out button, search button and loads the shelter list
     private void createShelterView() {
         setContentView(R.layout.activity_shelters);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -57,7 +57,7 @@ public class SheltersActivity extends AppCompatActivity {
         createShelterList();
     }
 
-    //Iterate through shelter list. For each shelter, create a TableRow and a TextView
+    //Iterate through the active shelter list. For each shelter, create a TableRow and a TextView
     private void createShelterList() {
         TableLayout shelterListContainer = (TableLayout) findViewById(R.id.shelterListContainer);
         Model m = Model.getInstance();
@@ -66,6 +66,7 @@ public class SheltersActivity extends AppCompatActivity {
                 TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT
         );
+        //Change how the shelter list should look here!!
         params.setMargins(50, 20, 0, 0);
         for (int i = 0; i < shelterList.size(); i++) {
             TableRow tableRow = new TableRow(this);
@@ -126,6 +127,7 @@ public class SheltersActivity extends AppCompatActivity {
         createShelterView();
     }
 
+    //Go to search view. Set the options the spinners should have
     public void goToSearch() {
         setContentView(R.layout.search_shelters);
         //Set options in the gender spinner
@@ -139,6 +141,7 @@ public class SheltersActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, AgeRange.values()));
     }
 
+    //Called when search button is clicked. Use the Model search method to load the active shelters
     public void searchClicked(View view) {
         Spinner spinner = (Spinner) findViewById(R.id.genderSpinner);
         Gender g = (Gender) spinner.getSelectedItem();

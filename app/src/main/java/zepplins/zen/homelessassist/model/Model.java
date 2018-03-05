@@ -114,6 +114,7 @@ public class Model {
         });
     }
 
+    //Add all shelters that meet the criteria to the activeShelters list
     public void search(Gender gender, AgeRange age, String name) {
         activeShelters.clear();
         for (Shelter s : shelters) {
@@ -139,6 +140,11 @@ public class Model {
             }
             activeShelters.add(s);
         }
+    }
+
+    //Make active shelters entire shelter list
+    public void resetActiveList() {
+        activeShelters = new LinkedList<>(shelters);
     }
 }
 
