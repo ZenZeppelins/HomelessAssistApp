@@ -8,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import zepplins.zen.homelessassist.R;
+import zepplins.zen.homelessassist.model.AgeRange;
+import zepplins.zen.homelessassist.model.Gender;
 import zepplins.zen.homelessassist.model.Model;
 import zepplins.zen.homelessassist.model.Shelter;
 
@@ -23,22 +27,30 @@ public class SheltersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createScreen();
+        createShelterView();
     }
 
     //This creates log out button and loads shelter list
-    private void createScreen() {
+    private void createShelterView() {
         setContentView(R.layout.activity_shelters);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.logOutFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Model.getInstance().getAuthenticator().signOut();
                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
+            }
+        });
+
+        fab = (FloatingActionButton) findViewById(R.id.searchFab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToSearch();
             }
         });
 
@@ -49,7 +61,7 @@ public class SheltersActivity extends AppCompatActivity {
     private void createShelterList() {
         TableLayout shelterListContainer = (TableLayout) findViewById(R.id.shelterListContainer);
         Model m = Model.getInstance();
-        List<Shelter> shelterList = m.getShelters();
+        List<Shelter> shelterList = m.getActiveShelters();
         TableRow.LayoutParams params = new TableRow.LayoutParams(
                 TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT
@@ -81,7 +93,7 @@ public class SheltersActivity extends AppCompatActivity {
         setContentView(R.layout.shelter_info_layout);
         Model m = Model.getInstance();
         //The shelter index is stored in the tag
-        Shelter shelter = m.getShelters().get((Integer) v.getTag());
+        Shelter shelter = m.getActiveShelters().get((Integer) v.getTag());
 
         //Set all off the shelter info
         TextView text = (TextView) findViewById(R.id.shelterName);
@@ -111,6 +123,31 @@ public class SheltersActivity extends AppCompatActivity {
 
     //Reload shelter list screen when back is clicked
     public void infoBackClicked(View view) {
-        createScreen();
+        createShelterView();
+    }
+
+    public void goToSearch() {
+        setContentView(R.layout.search_shelters);
+        //Set options in the gender spinner
+        Spinner spinner = (Spinner) findViewById(R.id.genderSpinner);
+        spinner.setAdapter(new ArrayAdapter<Gender>(this,
+                android.R.layout.simple_spinner_item, Gender.values()));
+
+        //Set options in the age range spinner
+        spinner = (Spinner) findViewById(R.id.ageSpinner);
+        spinner.setAdapter(new ArrayAdapter<AgeRange>(this,
+                android.R.layout.simple_spinner_item, AgeRange.values()));
+    }
+
+    public void searchClicked(View view) {
+        Spinner spinner = (Spinner) findViewById(R.id.genderSpinner);
+        Gender g = (Gender) spinner.getSelectedItem();
+        spinner = (Spinner) findViewById(R.id.ageSpinner);
+        AgeRange age = (AgeRange) spinner.getSelectedItem();
+        TextView textView = (TextView) findViewById(R.id.searchShelterName);
+        String search = textView.getText().toString();
+
+        Model.getInstance().search(g, age, search);
+        createShelterView();
     }
 }

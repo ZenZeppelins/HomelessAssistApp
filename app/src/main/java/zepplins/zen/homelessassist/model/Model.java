@@ -1,6 +1,7 @@
 package zepplins.zen.homelessassist.model;
 
 import android.content.Intent;
+import android.opengl.GLException;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +39,7 @@ public class Model {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private List<Shelter> shelters;
+    private List<Shelter> activeShelters;
     //These are the codes required to register as an admin or an employee
     private final String adminCode = "adminsOnly";
     private final String employeeCode = "employeesOnly";
@@ -47,11 +49,12 @@ public class Model {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         shelters = new LinkedList<>();
+        activeShelters = new LinkedList<>();
         loadShelters();
     }
 
-    public List<Shelter> getShelters() {
-        return shelters;
+    public List<Shelter> getActiveShelters() {
+        return activeShelters;
     }
 
     public FirebaseAuth getAuthenticator() {
@@ -100,6 +103,7 @@ public class Model {
                 for (DataSnapshot shelter : shelterList) {
                     Shelter newShelter = shelter.getValue(Shelter.class);
                     shelters.add(newShelter);
+                    activeShelters.add(newShelter);
                 }
             }
 
@@ -108,6 +112,33 @@ public class Model {
                 Log.w("Database", "loadPost:onCancelled", databaseError.toException());
             }
         });
+    }
+
+    public void search(Gender gender, AgeRange age, String name) {
+        activeShelters.clear();
+        for (Shelter s : shelters) {
+            //Check if gender doesn't match
+            if (gender != null) {
+                if (gender == Gender.MALE && s.getRestrictions().contains("Women")) {
+                    continue;
+                } else if (gender == Gender.FEMALE && s.getRestrictions().contains("Men")) {
+                    continue;
+                }
+            }
+            //Check if age doesn't match
+            if (age != null) {
+                if (age == AgeRange.FAMILIES && !s.getShelterName().contains("Families")) {
+                    continue;
+                } else if (age == AgeRange.CHILDREN && !s.getShelterName().contains("Children")) {
+                    continue;
+                }
+            }
+            //Check if name doesn't match
+            if (name != null && !s.getShelterName().contains(name)) {
+                continue;
+            }
+            activeShelters.add(s);
+        }
     }
 }
 
