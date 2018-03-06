@@ -78,8 +78,8 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="infoBackClicked"
-        android:text="Back"
+        android:onClick="backClicked"
+        android:text="@string/backButton"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="328dp" />
 </LinearLayout>

@@ -123,7 +123,7 @@ public class SheltersActivity extends AppCompatActivity {
     }
 
     //Reload shelter list screen when back is clicked
-    public void infoBackClicked(View view) {
+    public void backClicked(View view) {
         createShelterView();
     }
 

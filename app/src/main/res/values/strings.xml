@@ -29,6 +29,6 @@
 
     <string name="shelterNamePrompt">Shelter Name</string>
     <string name="searchButton">Search</string>
-
+    <string name="backButton">Back</string>
 
 </resources>

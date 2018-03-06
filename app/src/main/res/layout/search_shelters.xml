@@ -38,4 +38,13 @@
         android:onClick="searchClicked"
         android:text="@string/searchButton"
         android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="backClicked"
+        android:text="@string/backButton"
+        android:textStyle="bold" />
 </LinearLayout>
