@@ -32,6 +32,13 @@
         tools:layout_editor_absoluteY="90dp" />
 
     <TextView
+        android:id="@+id/shelterVacancy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="90dp" />
+
+    <TextView
         android:id="@+id/shelterRestrictions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,6 +80,22 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="292dp" />
+
+    <EditText
+        android:id="@+id/numBeds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/claimButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="claimClicked"
+        android:text="@string/claimButton"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="328dp" />
 
     <Button
         android:id="@+id/button2"

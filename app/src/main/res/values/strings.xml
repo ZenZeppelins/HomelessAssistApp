@@ -20,6 +20,7 @@
 
     <string name="shelterName">Shelter: %1$s</string>
     <string name="shelterCapacity">Capacity: %1$d</string>
+    <string name="shelterVacancy">Vacancy: %1$d</string>
     <string name="shelterRestrictions">Restrictions: %1$s</string>
     <string name="shelterLongitude">Longitude: %1$s</string>
     <string name="shelterLatitude">Latitude: %1$s</string>
@@ -29,6 +30,7 @@
 
     <string name="shelterNamePrompt">Shelter Name</string>
     <string name="searchButton">Search</string>
+    <string name="claimButton">Claim Beds</string>
     <string name="backButton">Back</string>
 
 </resources>

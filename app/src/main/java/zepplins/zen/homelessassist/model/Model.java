@@ -51,6 +51,7 @@ public class Model {
         shelters = new LinkedList<>();
         activeShelters = new LinkedList<>();
         loadShelters();
+        createVacancyListener();
     }
 
     public List<Shelter> getActiveShelters() {
@@ -145,6 +146,47 @@ public class Model {
     //Make active shelters entire shelter list
     public void resetActiveList() {
         activeShelters = new LinkedList<>(shelters);
+    }
+
+    //Claims a certain amount of beds in a certain shelter
+    //Returns whether or not the claim is successful
+    public boolean claimBeds(int amount, Shelter shelter) {
+        int newVacancy = shelter.getVacancy() - amount;
+        if (newVacancy < 0) {
+            return false;
+        }
+        int index = shelters.indexOf(shelter);
+        if (index < 0) {
+            return false;
+        }
+        mDatabase.child("shelters").child(index + "").child("vacancy").setValue(newVacancy);
+        return true;
+    }
+
+    //Creates a database listener.
+    // Whenever the database changes, the vacancy values are updated in our Model
+    private void createVacancyListener() {
+        String path = "shelters";
+        DatabaseReference ref = mDatabase.child(path);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> shelterList = dataSnapshot.getChildren();
+                int i = 0;
+                for (DataSnapshot shelter : shelterList) {
+                    int newVacancy = ((Long) shelter.child("vacancy").getValue()).intValue();
+                    if (i < shelters.size()) {
+                        shelters.get(i).setVacancy(newVacancy);
+                    }
+                    i++;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Database", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
     }
 }
 
