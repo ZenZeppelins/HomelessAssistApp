@@ -216,5 +216,22 @@ public class Model {
             }
         });
     }
+
+    public void releaseBeds() {
+        String userEmail = mAuth.getCurrentUser().getEmail();
+        Query q = mDatabase.child("users").orderByChild("email").equalTo(userEmail);
+        q.addListenerForSingleValueEvent((new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String userID = dataSnapshot.getKey();
+                mDatabase.child("users").child(userID).child("numBeds").setValue(0);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Database", "loadPost:onCancelled", databaseError.toException());
+            }
+        }));
+    }
 }
 
