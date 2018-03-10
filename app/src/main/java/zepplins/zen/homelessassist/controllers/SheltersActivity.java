@@ -137,8 +137,12 @@ public class SheltersActivity extends AppCompatActivity {
 
     public void claimClicked(View view) {
         String val = ((EditText) findViewById(R.id.numBeds)).getText().toString();
-        int num = Integer.parseInt(val);
-        Model.getInstance().claimBeds(num, activeShelter);
+        try {
+            int num = Integer.parseInt(val);
+            Model.getInstance().claimBeds(num, activeShelter);
+        } catch (NumberFormatException nfe) {
+            return;
+        }
     }
 
     public void loadShelterData() {

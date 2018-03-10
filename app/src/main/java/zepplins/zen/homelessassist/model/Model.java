@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -151,20 +152,47 @@ public class Model {
     //Claims a certain amount of beds in a certain shelter
     //Returns whether or not the claim is successful
     public boolean claimBeds(int amount, Shelter shelter) {
-        int newVacancy = shelter.getVacancy() - amount;
+        final int numBeds = amount;
+        final int newVacancy = shelter.getVacancy() - amount;
         if (newVacancy < 0) {
             return false;
         }
-        int index = shelters.indexOf(shelter);
+        final int index = shelters.indexOf(shelter);
         if (index < 0) {
             return false;
         }
-        mDatabase.child("shelters").child(index + "").child("vacancy").setValue(newVacancy);
+        //Check if user already claimed beds
+        String userEmail = mAuth.getCurrentUser().getEmail();
+        Query q = mDatabase.child("users").orderByChild("email").equalTo(userEmail);
+        q.addListenerForSingleValueEvent((new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot alreadyClaimed = dataSnapshot.child("numBeds");
+                if (alreadyClaimed.getValue() == null || (Integer) alreadyClaimed.getValue() == 0) {
+                    //no beds claimed
+                    //Change vacancy in database
+                    mDatabase.child("shelters").child(index + "").child("vacancy").setValue(newVacancy);
+
+                    //Change user info in database
+                    String userID = dataSnapshot.getKey();
+                    mDatabase.child("users").child(userID).child("shelterID").setValue(index);
+                    mDatabase.child("users").child(userID).child("numBeds").setValue(numBeds);
+                } else {
+                    //beds already claimed
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Database", "loadPost:onCancelled", databaseError.toException());
+            }
+        }));
+        
         return true;
     }
 
     //Creates a database listener.
-    // Whenever the database changes, the vacancy values are updated in our Model
+    //Whenever the database changes, the vacancy values are updated in our Model
     private void createVacancyListener() {
         String path = "shelters";
         DatabaseReference ref = mDatabase.child(path);
