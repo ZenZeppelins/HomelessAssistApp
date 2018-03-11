@@ -167,14 +167,21 @@ public class Model {
         q.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot alreadyClaimed = dataSnapshot.child("numBeds");
-                if (alreadyClaimed.getValue() == null || (Integer) alreadyClaimed.getValue() == 0) {
+                Map<String, Object> userDataMap = (Map<String, Object>) dataSnapshot.getValue();
+                String userID = "";
+                Map<String, String> userInfo = null;
+                for (Map.Entry<String, Object> entry : userDataMap.entrySet()) {
+                    userID = entry.getKey();
+                    userInfo = (Map<String, String>) entry.getValue();
+                }
+                String num = userInfo.get("numBeds");
+                int alreadyClaimed = num == null ? 0 : Integer.parseInt(num);
+                if (alreadyClaimed == 0) {
                     //no beds claimed
                     //Change vacancy in database
                     mDatabase.child("shelters").child(index + "").child("vacancy").setValue(newVacancy);
 
                     //Change user info in database
-                    String userID = dataSnapshot.getKey();
                     mDatabase.child("users").child(userID).child("shelterID").setValue(index);
                     mDatabase.child("users").child(userID).child("numBeds").setValue(numBeds);
                 } else {
