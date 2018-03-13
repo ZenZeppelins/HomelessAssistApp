@@ -137,7 +137,7 @@ public class Model {
                 }
             }
             //Check if name doesn't match
-            if (name != null && !s.getShelterName().contains(name)) {
+            if (name != null && !s.getShelterName().toLowerCase().contains(name.toLowerCase())) {
                 continue;
             }
             activeShelters.add(s);
