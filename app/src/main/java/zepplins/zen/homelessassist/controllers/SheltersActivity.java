@@ -58,6 +58,14 @@ public class SheltersActivity extends AppCompatActivity {
             }
         });
 
+        fab = (FloatingActionButton) findViewById(R.id.releaseFab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Model.getInstance().releaseBeds();
+            }
+        });
+
         createShelterList();
     }
 
@@ -140,6 +148,7 @@ public class SheltersActivity extends AppCompatActivity {
         try {
             int num = Integer.parseInt(val);
             Model.getInstance().claimBeds(num, activeShelter);
+            backClicked(null);
         } catch (NumberFormatException nfe) {
             return;
         }

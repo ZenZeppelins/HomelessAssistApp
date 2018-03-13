@@ -169,13 +169,14 @@ public class Model {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> userDataMap = (Map<String, Object>) dataSnapshot.getValue();
                 String userID = "";
-                Map<String, String> userInfo = null;
+                Map<String, Object> userInfo = null;
                 for (Map.Entry<String, Object> entry : userDataMap.entrySet()) {
                     userID = entry.getKey();
-                    userInfo = (Map<String, String>) entry.getValue();
+                    userInfo = (Map<String, Object>) entry.getValue();
+                    break;
                 }
-                String num = userInfo.get("numBeds");
-                int alreadyClaimed = num == null ? 0 : Integer.parseInt(num);
+                Long num = (Long) userInfo.get("numBeds");
+                int alreadyClaimed = num == null ? 0 : num.intValue();
                 if (alreadyClaimed == 0) {
                     //no beds claimed
                     //Change vacancy in database
@@ -230,7 +231,22 @@ public class Model {
         q.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String userID = dataSnapshot.getKey();
+                Map<String, Object> userDataMap = (Map<String, Object>) dataSnapshot.getValue();
+                String userID = "";
+                Map<String, Object> userInfo = null;
+                for (Map.Entry<String, Object> entry : userDataMap.entrySet()) {
+                    userID = entry.getKey();
+                    userInfo = (Map<String, Object>) entry.getValue();
+                    break;
+                }
+                Long num = (Long) userInfo.get("numBeds");
+                int claimed = num == null ? 0 : num.intValue();
+                if (claimed != 0) {
+                    Long shelterNum = (Long) userInfo.get("shelterID");
+                    int shelterID = shelterNum == null ? 0 : shelterNum.intValue();
+                    int newVacancy = shelters.get(shelterID).getVacancy() + claimed;
+                    mDatabase.child("shelters").child(shelterID + "").child("vacancy").setValue(newVacancy);
+                }
                 mDatabase.child("users").child(userID).child("numBeds").setValue(0);
             }
 
