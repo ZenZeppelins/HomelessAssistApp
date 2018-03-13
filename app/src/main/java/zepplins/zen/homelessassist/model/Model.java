@@ -130,9 +130,11 @@ public class Model {
             }
             //Check if age doesn't match
             if (age != null) {
-                if (age == AgeRange.FAMILIES && !s.getShelterName().contains("Families")) {
+                if (age == AgeRange.FAMILIES && !s.getRestrictions().toLowerCase().contains("famil")) {
                     continue;
-                } else if (age == AgeRange.CHILDREN && !s.getShelterName().contains("Children")) {
+                } else if (age == AgeRange.CHILDREN && !s.getRestrictions().toLowerCase().contains("child")) {
+                    continue;
+                } else if (age == AgeRange.YOUNG_ADULTS && !s.getRestrictions().toLowerCase().contains("young")) {
                     continue;
                 }
             }
