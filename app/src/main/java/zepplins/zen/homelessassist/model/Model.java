@@ -170,6 +170,7 @@ public class Model {
                 Map<String, Object> userDataMap = (Map<String, Object>) dataSnapshot.getValue();
                 String userID = "";
                 Map<String, Object> userInfo = null;
+                //Get the first map entry
                 for (Map.Entry<String, Object> entry : userDataMap.entrySet()) {
                     userID = entry.getKey();
                     userInfo = (Map<String, Object>) entry.getValue();
@@ -177,6 +178,7 @@ public class Model {
                 }
                 Long num = (Long) userInfo.get("numBeds");
                 int alreadyClaimed = num == null ? 0 : num.intValue();
+                //Only allow the user to claim beds if they have 0 beds claimed
                 if (alreadyClaimed == 0) {
                     //no beds claimed
                     //Change vacancy in database
@@ -234,6 +236,7 @@ public class Model {
                 Map<String, Object> userDataMap = (Map<String, Object>) dataSnapshot.getValue();
                 String userID = "";
                 Map<String, Object> userInfo = null;
+                //Get the first map entry
                 for (Map.Entry<String, Object> entry : userDataMap.entrySet()) {
                     userID = entry.getKey();
                     userInfo = (Map<String, Object>) entry.getValue();
@@ -241,6 +244,7 @@ public class Model {
                 }
                 Long num = (Long) userInfo.get("numBeds");
                 int claimed = num == null ? 0 : num.intValue();
+                //If the user has more than 0 beds claimed, increase vacancy of released shelter
                 if (claimed != 0) {
                     Long shelterNum = (Long) userInfo.get("shelterID");
                     int shelterID = shelterNum == null ? 0 : shelterNum.intValue();

@@ -144,6 +144,7 @@ public class SheltersActivity extends AppCompatActivity {
     }
 
     public void claimClicked(View view) {
+        //Claim those beds then go back to the previous screen
         String val = ((EditText) findViewById(R.id.numBeds)).getText().toString();
         try {
             int num = Integer.parseInt(val);
