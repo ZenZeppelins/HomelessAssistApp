@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -39,13 +41,13 @@ public class SheltersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shelters);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.shelters_menu);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.logOutFab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.mapFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Model.getInstance().getAuthenticator().signOut();
-                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent i = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(i);
             }
         });
@@ -118,29 +120,9 @@ public class SheltersActivity extends AppCompatActivity {
 
     //Go to search view. Set the options the spinners should have
     public void goToSearch() {
-        setContentView(R.layout.search_shelters);
-        //Set options in the gender spinner
-        Spinner spinner = (Spinner) findViewById(R.id.genderSpinner);
-        spinner.setAdapter(new ArrayAdapter<Gender>(this,
-                android.R.layout.simple_spinner_item, Gender.values()));
-
-        //Set options in the age range spinner
-        spinner = (Spinner) findViewById(R.id.ageSpinner);
-        spinner.setAdapter(new ArrayAdapter<AgeRange>(this,
-                android.R.layout.simple_spinner_item, AgeRange.values()));
-    }
-
-    //Called when search button is clicked. Use the Model search method to load the active shelters
-    public void searchClicked(View view) {
-        Spinner spinner = (Spinner) findViewById(R.id.genderSpinner);
-        Gender g = (Gender) spinner.getSelectedItem();
-        spinner = (Spinner) findViewById(R.id.ageSpinner);
-        AgeRange age = (AgeRange) spinner.getSelectedItem();
-        TextView textView = (TextView) findViewById(R.id.searchShelterName);
-        String search = textView.getText().toString();
-
-        Model.getInstance().search(g, age, search);
-        createShelterView();
+        Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+        i.putExtra("source", "shelters");
+        startActivity(i);
     }
 
     public void claimClicked(View view) {
@@ -186,5 +168,26 @@ public class SheltersActivity extends AppCompatActivity {
 
         text = (TextView) findViewById(R.id.shelterSpecialNotes);
         text.setText(getString(R.string.shelterSpecialNotes, activeShelter.getSpecialNotes()));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.shelters_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.logOut:
+                Model.getInstance().getAuthenticator().signOut();
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
