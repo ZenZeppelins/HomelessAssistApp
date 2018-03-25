@@ -42,6 +42,15 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 startActivity(i);
             }
         });
+
+        fab = (FloatingActionButton) findViewById(R.id.backMapFab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), SheltersActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
 
