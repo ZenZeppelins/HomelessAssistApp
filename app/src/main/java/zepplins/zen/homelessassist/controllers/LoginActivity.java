@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,9 +46,10 @@ public class LoginActivity extends AppCompatActivity {
         //When Admin or Employee is selected, show the TextView for the account code
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int pos, long id) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                                       int pos, long id) {
                 View codeEntry = findViewById(R.id.accountCode);
-                if (selectedItemView == null || pos == 0) {
+                if ((selectedItemView == null) || (pos == 0)) {
                     codeEntry.setVisibility(View.GONE);
                 } else {
                     codeEntry.setVisibility(View.VISIBLE);
@@ -73,8 +73,9 @@ public class LoginActivity extends AppCompatActivity {
         TextView name = (TextView) findViewById(R.id.name);
         Spinner accountType = (Spinner) findViewById(R.id.accountTypeSpinner);
         TextView accountCode = (TextView) findViewById(R.id.accountCode);
-        registerUser(email.getText().toString(), password.getText().toString(), name.getText().toString(),
-                accountType.getSelectedItem().toString(), accountCode.getText().toString());
+        registerUser(email.getText().toString(), password.getText().toString(),
+                name.getText().toString(), accountType.getSelectedItem().toString(),
+                accountCode.getText().toString());
     }
 
     public void onSignInClicked(View view) {
@@ -85,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Sign a user into Firebase
     public void signInUser(String email, String password) {
-        if (email == null || password == null || email.length() == 0 || password.length() == 0) {
+        if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
             failedSignIn();
             return;
         }
@@ -106,8 +107,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //Register the user on Firebase
-    public void registerUser(String _email, String password, String name, String _userType, String _accountCode) {
-        if (_email == null || password == null || _email.length() == 0 || password.length() == 0) {
+    public void registerUser(String _email, String password, String name, String _userType,
+                             String _accountCode) {
+        if (_email == null || password == null || _email.isEmpty() || password.isEmpty()) {
             failedRegistration();
             return;
         }

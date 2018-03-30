@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,8 +20,6 @@ import zepplins.zen.homelessassist.model.Model;
 import zepplins.zen.homelessassist.model.Shelter;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
-
-    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +58,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
         List<Shelter> active = Model.getInstance().getActiveShelters();
         double latTotal = 0;
         double longTotal = 0;
@@ -71,7 +66,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         for (Shelter s : active) {
             LatLng loc = new LatLng(s.getLatitude(), s.getLongitude());
             String snippet = "Phone: " + s.getPhoneNumber();
-            mMap.addMarker(new MarkerOptions().position(loc).title(s.getShelterName()).snippet(snippet));
+            googleMap.addMarker(new MarkerOptions().position(loc).
+                    title(s.getShelterName()).snippet(snippet));
             latTotal += s.getLatitude();
             longTotal += s.getLongitude();
             count++;
@@ -80,13 +76,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         double latAvg = latTotal / count;
         double longAvg = longTotal / count;
         //If no shelters are in active, set camera to Georgia Tech
-        if (active.size() == 0) {
+        if (active.isEmpty()) {
             latAvg = 33.7756;
             longAvg = -84.3963;
         }
         //Move camera to average lat/long of shelters
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latAvg, longAvg)));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latAvg, longAvg)));
         //11 found through experimentation
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(11));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(11));
     }
 }

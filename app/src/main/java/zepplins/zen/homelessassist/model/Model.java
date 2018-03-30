@@ -1,14 +1,10 @@
 package zepplins.zen.homelessassist.model;
 
-import android.content.Intent;
-import android.opengl.GLException;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-
-import zepplins.zen.homelessassist.controllers.SheltersActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,7 +23,7 @@ import java.util.Map;
  * Created by mayhul on 2/11/18.
  */
 
-public class Model {
+public final class Model {
     private static Model _instance;
 
     public static Model getInstance() {
@@ -41,9 +37,6 @@ public class Model {
     private DatabaseReference mDatabase;
     private List<Shelter> shelters;
     private List<Shelter> activeShelters;
-    //These are the codes required to register as an admin or an employee
-    private final String adminCode = "adminsOnly";
-    private final String employeeCode = "employeesOnly";
 
     //When Model is created, Firebase is instantiated and the shelters are acquired from the DB
     private Model() {
@@ -65,19 +58,20 @@ public class Model {
 
     //This method checks if the user is allowed to register as a admin/employee
     public boolean validateRegistration(String user, String code) {
-        if (user == null || code == null) {
+        //These are the codes required to register as an admin or an employee
+        String adminCode = "adminsOnly";
+        String employeeCode = "employeesOnly";
+
+        if ((user == null) || (code == null)) {
             return false;
         }
-        if (user.equals("User")) {
+        if (("User").equals(user)) {
             return true;
         }
-        if (user.equals("Admin") && code.equals(adminCode)) {
+        if (("Admin").equals(user) && code.equals(adminCode)) {
             return true;
         }
-        if (user.equals("Shelter Employee") && code.equals(employeeCode)) {
-            return true;
-        }
-        return false;
+        return (("Shelter Employee").equals(user) && code.equals(employeeCode));
     }
 
     public void setUserDetails(String email, String displayName, String userType) {
@@ -122,24 +116,28 @@ public class Model {
         for (Shelter s : shelters) {
             //Check if gender doesn't match
             if (gender != null) {
-                if (gender == Gender.MALE && s.getRestrictions().contains("Women")) {
+                if ((gender == Gender.MALE) && (s.getRestrictions().contains("Women"))) {
                     continue;
-                } else if (gender == Gender.FEMALE && s.getRestrictions().contains("Men")) {
+                } else if ((gender == Gender.FEMALE) && (s.getRestrictions().contains("Men"))) {
                     continue;
                 }
             }
             //Check if age doesn't match
             if (age != null) {
-                if (age == AgeRange.FAMILIES && !s.getRestrictions().toLowerCase().contains("famil")) {
+                if ((age == AgeRange.FAMILIES) &&
+                        (!s.getRestrictions().toLowerCase().contains("famil"))) {
                     continue;
-                } else if (age == AgeRange.CHILDREN && !s.getRestrictions().toLowerCase().contains("child")) {
+                } else if ((age == AgeRange.CHILDREN) &&
+                        (!s.getRestrictions().toLowerCase().contains("child"))) {
                     continue;
-                } else if (age == AgeRange.YOUNG_ADULTS && !s.getRestrictions().toLowerCase().contains("young")) {
+                } else if ((age == AgeRange.YOUNG_ADULTS) &&
+                        (!s.getRestrictions().toLowerCase().contains("young"))) {
                     continue;
                 }
             }
             //Check if name doesn't match
-            if (name != null && !s.getShelterName().toLowerCase().contains(name.toLowerCase())) {
+            if ((name != null) &&
+                    (!s.getShelterName().toLowerCase().contains(name.toLowerCase()))) {
                 continue;
             }
             activeShelters.add(s);
@@ -179,12 +177,13 @@ public class Model {
                     break;
                 }
                 Long num = (Long) userInfo.get("numBeds");
-                int alreadyClaimed = num == null ? 0 : num.intValue();
+                int alreadyClaimed = num == null ? 0 : (num.intValue());
                 //Only allow the user to claim beds if they have 0 beds claimed
                 if (alreadyClaimed == 0) {
                     //no beds claimed
                     //Change vacancy in database
-                    mDatabase.child("shelters").child(index + "").child("vacancy").setValue(newVacancy);
+                    mDatabase.child("shelters").child(index + "")
+                            .child("vacancy").setValue(newVacancy);
 
                     //Change user info in database
                     mDatabase.child("users").child(userID).child("shelterID").setValue(index);
@@ -245,11 +244,11 @@ public class Model {
                     break;
                 }
                 Long num = (Long) userInfo.get("numBeds");
-                int claimed = num == null ? 0 : num.intValue();
+                int claimed = num == null ? 0 : (num.intValue());
                 //If the user has more than 0 beds claimed, increase vacancy of released shelter
                 if (claimed != 0) {
                     Long shelterNum = (Long) userInfo.get("shelterID");
-                    int shelterID = shelterNum == null ? 0 : shelterNum.intValue();
+                    int shelterID = shelterNum == null ? 0 : (shelterNum.intValue());
                     int newVacancy = shelters.get(shelterID).getVacancy() + claimed;
                     mDatabase.child("shelters").child(shelterID + "").child("vacancy").setValue(newVacancy);
                 }

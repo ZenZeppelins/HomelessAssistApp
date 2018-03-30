@@ -12,7 +12,7 @@ public enum AgeRange {
 
     private String displayName;
 
-    private AgeRange (String displayName){
+    AgeRange (String displayName){
         this.displayName = displayName;
     }
 

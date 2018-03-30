@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">HomelessAssist</string>
-    <string name="action_settings">Settings</string>
     <string name="logInButton">Log In</string>
     <string name="registerButton">Register</string>
     <string name="cancelButton">Cancel</string>

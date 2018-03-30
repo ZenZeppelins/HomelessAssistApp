@@ -10,9 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -20,8 +18,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import zepplins.zen.homelessassist.R;
-import zepplins.zen.homelessassist.model.AgeRange;
-import zepplins.zen.homelessassist.model.Gender;
 import zepplins.zen.homelessassist.model.Model;
 import zepplins.zen.homelessassist.model.Shelter;
 
@@ -133,7 +129,7 @@ public class SheltersActivity extends AppCompatActivity {
             Model.getInstance().claimBeds(num, activeShelter);
             backClicked(null);
         } catch (NumberFormatException nfe) {
-            return;
+
         }
     }
 
