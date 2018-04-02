@@ -19,6 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import zepplins.zen.homelessassist.R;
 import zepplins.zen.homelessassist.model.Model;
 
+/**
+ * The first activity that loads, when the user can log in / register
+ */
 public class LoginActivity extends AppCompatActivity {
 
     @Override
@@ -29,14 +32,22 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.initial_view);
     }
 
+    /**
+     * Go to the log in view
+     * @param view Needed for android buttons
+     */
     public void onGoToLogIn(View view) {
         setContentView(R.layout.login);
     }
 
+    /**
+     * Go to the register view
+     * @param view Needed for android buttons
+     */
     public void onGoToRegister(View view) {
         setContentView(R.layout.register);
         //Set options in the registration spinner
-        Spinner spinner = (Spinner) findViewById(R.id.accountTypeSpinner);
+        Spinner spinner = findViewById(R.id.accountTypeSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.account_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -63,30 +74,42 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Got back to the initial view
+     * @param view Needed for android buttons
+     */
     public void onCancelClicked(View view) {
         setContentView(R.layout.initial_view);
     }
 
+    /**
+     * Get all the user's info and call registerUser()
+     * @param view Needed for android buttons
+     */
     public void onRegisterClicked(View view) {
-        TextView email = (TextView) findViewById(R.id.email);
-        TextView password = (TextView) findViewById(R.id.password);
-        TextView name = (TextView) findViewById(R.id.name);
-        Spinner accountType = (Spinner) findViewById(R.id.accountTypeSpinner);
-        TextView accountCode = (TextView) findViewById(R.id.accountCode);
+        TextView email = findViewById(R.id.email);
+        TextView password = findViewById(R.id.password);
+        TextView name = findViewById(R.id.name);
+        Spinner accountType = findViewById(R.id.accountTypeSpinner);
+        TextView accountCode = findViewById(R.id.accountCode);
         registerUser(email.getText().toString(), password.getText().toString(),
                 name.getText().toString(), accountType.getSelectedItem().toString(),
                 accountCode.getText().toString());
     }
 
+    /**
+     * Get all the user's info and call signInUser()
+     * @param view Needed for android buttons
+     */
     public void onSignInClicked(View view) {
-        TextView email = (TextView) findViewById(R.id.email);
-        TextView password = (TextView) findViewById(R.id.password);
+        TextView email = findViewById(R.id.email);
+        TextView password = findViewById(R.id.password);
         signInUser(email.getText().toString(), password.getText().toString());
     }
 
     //Sign a user into Firebase
-    public void signInUser(String email, String password) {
-        if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
+    private void signInUser(String email, String password) {
+        if ((email == null) || (password == null) || email.isEmpty() || password.isEmpty()) {
             failedSignIn();
             return;
         }
@@ -107,9 +130,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //Register the user on Firebase
-    public void registerUser(String _email, String password, String name, String _userType,
-                             String _accountCode) {
-        if (_email == null || password == null || _email.isEmpty() || password.isEmpty()) {
+    private void registerUser(String _email, String password, String name, String _userType,
+                              String _accountCode) {
+        if ((_email == null) || (password == null) || _email.isEmpty() || password.isEmpty()) {
             failedRegistration();
             return;
         }
@@ -139,13 +162,13 @@ public class LoginActivity extends AppCompatActivity {
 
     //What to do when a registration fails
     private void failedRegistration() {
-        TextView failed = (TextView) findViewById(R.id.registerFailed);
+        TextView failed = findViewById(R.id.registerFailed);
         failed.setVisibility(TextView.VISIBLE);
     }
 
     //What to do when sign in fails
     private void failedSignIn() {
-        TextView failed = (TextView) findViewById(R.id.logInFailed);
+        TextView failed = findViewById(R.id.logInFailed);
         failed.setVisibility(TextView.VISIBLE);
     }
 

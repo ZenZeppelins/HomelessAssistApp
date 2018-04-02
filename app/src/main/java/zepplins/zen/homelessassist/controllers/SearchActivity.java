@@ -13,6 +13,9 @@ import zepplins.zen.homelessassist.model.AgeRange;
 import zepplins.zen.homelessassist.model.Gender;
 import zepplins.zen.homelessassist.model.Model;
 
+/**
+ * Activity when user is searching/filtering shelters
+ */
 public class SearchActivity extends AppCompatActivity {
     private String source;
 
@@ -22,34 +25,40 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.search_shelters);
         source = getIntent().getStringExtra("source");
         //Set options in the gender spinner
-        Spinner spinner = (Spinner) findViewById(R.id.genderSpinner);
+        Spinner spinner = findViewById(R.id.genderSpinner);
         spinner.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, Gender.values()));
 
         //Set options in the age range spinner
-        spinner = (Spinner) findViewById(R.id.ageSpinner);
+        spinner = findViewById(R.id.ageSpinner);
         spinner.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, AgeRange.values()));
     }
 
-    //Reload shelter list screen when back is clicked
+    /**
+     * Reload shelter list screen when back is clicked. Go back to the activity that called search
+     * @param view Needed for android buttons
+     */
     public void backClicked(View view) {
-        if (source.equals("shelters")) {
+        if ("shelters".equals(source)) {
             Intent i = new Intent(getApplicationContext(), SheltersActivity.class);
             startActivity(i);
-        } else if (source.equals("map")) {
+        } else if ("map".equals(source)) {
             Intent i = new Intent(getApplicationContext(), MapActivity.class);
             startActivity(i);
         }
     }
 
-    //Called when search button is clicked. Use the Model search method to load the active shelters
+    /**
+     * Called when search button is clicked. Use the Model search method to load the active shelters
+     * @param view Needed for android buttons
+     */
     public void searchClicked(View view) {
-        Spinner spinner = (Spinner) findViewById(R.id.genderSpinner);
+        Spinner spinner = findViewById(R.id.genderSpinner);
         Gender g = (Gender) spinner.getSelectedItem();
-        spinner = (Spinner) findViewById(R.id.ageSpinner);
+        spinner = findViewById(R.id.ageSpinner);
         AgeRange age = (AgeRange) spinner.getSelectedItem();
-        TextView textView = (TextView) findViewById(R.id.searchShelterName);
+        TextView textView = findViewById(R.id.searchShelterName);
         String search = textView.getText().toString();
 
         Model.getInstance().search(g, age, search);

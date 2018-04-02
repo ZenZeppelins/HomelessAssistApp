@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,8 +22,13 @@ import zepplins.zen.homelessassist.R;
 import zepplins.zen.homelessassist.model.Model;
 import zepplins.zen.homelessassist.model.Shelter;
 
+/**
+ * The activity when the shelter list is showing / user is searching for shelters /
+ * user is claiming and releasing beds
+ */
 public class SheltersActivity extends AppCompatActivity {
     //This is the shelter that's info is currently being viewed
+    @Nullable
     private Shelter activeShelter;
 
 
@@ -32,14 +38,16 @@ public class SheltersActivity extends AppCompatActivity {
         createShelterView();
     }
 
-    //This creates the log out button, search button and loads the shelter list
+    /**
+     * This creates the log out button, search button and loads the shelter list
+     */
     private void createShelterView() {
         setContentView(R.layout.activity_shelters);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.shelters_menu);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.mapFab);
+        FloatingActionButton fab = findViewById(R.id.mapFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,7 +56,7 @@ public class SheltersActivity extends AppCompatActivity {
             }
         });
 
-        fab = (FloatingActionButton) findViewById(R.id.searchFab);
+        fab = findViewById(R.id.searchFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +64,7 @@ public class SheltersActivity extends AppCompatActivity {
             }
         });
 
-        fab = (FloatingActionButton) findViewById(R.id.releaseFab);
+        fab = findViewById(R.id.releaseFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,9 +75,11 @@ public class SheltersActivity extends AppCompatActivity {
         createShelterList();
     }
 
-    //Iterate through the active shelter list. For each shelter, create a TableRow and a TextView
+    /**
+     * Iterate through the active shelter list. For each shelter, create a TableRow and a TextView
+     */
     private void createShelterList() {
-        TableLayout shelterListContainer = (TableLayout) findViewById(R.id.shelterListContainer);
+        TableLayout shelterListContainer = findViewById(R.id.shelterListContainer);
         Model m = Model.getInstance();
         List<Shelter> shelterList = m.getActiveShelters();
         TableRow.LayoutParams params = new TableRow.LayoutParams(
@@ -108,19 +118,27 @@ public class SheltersActivity extends AppCompatActivity {
         loadShelterData();
     }
 
-    //Reload shelter list screen when back is clicked
+    /**
+     * Reload shelter list screen when back is clicked
+     * @param view Needed for android buttons
+     */
     public void backClicked(View view) {
         activeShelter = null;
         createShelterView();
     }
 
     //Go to search view. Set the options the spinners should have
-    public void goToSearch() {
+    private void goToSearch() {
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         i.putExtra("source", "shelters");
         startActivity(i);
     }
 
+    /**
+     * Claims beds in Model and goes back to Shelter view
+     * Goes back to shelter view because the vacancy number changed
+     * @param view Needed for android buttons
+     */
     public void claimClicked(View view) {
         //Claim those beds then go back to the previous screen
         String val = ((EditText) findViewById(R.id.numBeds)).getText().toString();
@@ -128,41 +146,41 @@ public class SheltersActivity extends AppCompatActivity {
             int num = Integer.parseInt(val);
             Model.getInstance().claimBeds(num, activeShelter);
             backClicked(null);
-        } catch (NumberFormatException nfe) {
+        } catch (NumberFormatException ignored) {
 
         }
     }
 
-    public void loadShelterData() {
+    private void loadShelterData() {
         if (activeShelter == null) {
             return;
         }
         //Set all off the shelter info
-        TextView text = (TextView) findViewById(R.id.shelterName);
+        TextView text = findViewById(R.id.shelterName);
         text.setText(getString(R.string.shelterName, activeShelter.getShelterName()));
 
-        text = (TextView) findViewById(R.id.shelterCapacity);
+        text = findViewById(R.id.shelterCapacity);
         text.setText(getString(R.string.shelterCapacity, activeShelter.getCapacity()));
 
-        text = (TextView) findViewById(R.id.shelterVacancy);
+        text = findViewById(R.id.shelterVacancy);
         text.setText(getString(R.string.shelterVacancy, activeShelter.getVacancy()));
 
-        text = (TextView) findViewById(R.id.shelterRestrictions);
+        text = findViewById(R.id.shelterRestrictions);
         text.setText(getString(R.string.shelterRestrictions, activeShelter.getRestrictions()));
 
-        text = (TextView) findViewById(R.id.shelterLongitude);
+        text = findViewById(R.id.shelterLongitude);
         text.setText(getString(R.string.shelterLongitude, activeShelter.getLongitude() + ""));
 
-        text = (TextView) findViewById(R.id.shelterLatitude);
+        text = findViewById(R.id.shelterLatitude);
         text.setText(getString(R.string.shelterLatitude, activeShelter.getLatitude() + ""));
 
-        text = (TextView) findViewById(R.id.shelterAddress);
+        text = findViewById(R.id.shelterAddress);
         text.setText(getString(R.string.shelterAddress, activeShelter.getAddress()));
 
-        text = (TextView) findViewById(R.id.shelterPhoneNumber);
+        text = findViewById(R.id.shelterPhoneNumber);
         text.setText(getString(R.string.shelterPhone, activeShelter.getPhoneNumber()));
 
-        text = (TextView) findViewById(R.id.shelterSpecialNotes);
+        text = findViewById(R.id.shelterSpecialNotes);
         text.setText(getString(R.string.shelterSpecialNotes, activeShelter.getSpecialNotes()));
     }
 

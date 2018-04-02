@@ -18,11 +18,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * Created by mayhul on 2/11/18.
+ * Facade class that has methods to manipulate data as needed
  */
-
 public final class Model {
     private static Model _instance;
 
@@ -33,9 +31,9 @@ public final class Model {
         return _instance;
     }
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private List<Shelter> shelters;
+    private final FirebaseAuth mAuth;
+    private final DatabaseReference mDatabase;
+    private final List<Shelter> shelters;
     private List<Shelter> activeShelters;
 
     //When Model is created, Firebase is instantiated and the shelters are acquired from the DB
@@ -48,15 +46,29 @@ public final class Model {
         createVacancyListener();
     }
 
+    /**
+     * Gets all shelters that were loaded from the last search/filtering
+     * Initially all the shelters
+     * @return The list of shelters that met the criteria
+     */
     public List<Shelter> getActiveShelters() {
         return activeShelters;
     }
 
+    /**
+     * Used to log people in to Firebase
+     * @return The authenticator
+     */
     public FirebaseAuth getAuthenticator() {
         return mAuth;
     }
 
-    //This method checks if the user is allowed to register as a admin/employee
+    /**
+     * This method checks if the user is allowed to register as an admin/employee
+     * @param user The user type they are trying to register as
+     * @param code The code they input
+     * @return true if they entered the correct code
+     */
     public boolean validateRegistration(String user, String code) {
         //These are the codes required to register as an admin or an employee
         String adminCode = "adminsOnly";
@@ -65,15 +77,15 @@ public final class Model {
         if ((user == null) || (code == null)) {
             return false;
         }
-        if (("User").equals(user)) {
-            return true;
-        }
-        if (("Admin").equals(user) && code.equals(adminCode)) {
-            return true;
-        }
-        return (("Shelter Employee").equals(user) && code.equals(employeeCode));
+        return ("User").equals(user) || (("Admin").equals(user) && code.equals(adminCode)) || (("Shelter Employee").equals(user) && code.equals(employeeCode));
     }
 
+    /**
+     * When a user registers for the first time, this puts their data in the database
+     * @param email User's email
+     * @param displayName User's display name
+     * @param userType User type (normal/admin/employee)
+     */
     public void setUserDetails(String email, String displayName, String userType) {
         FirebaseUser user = mAuth.getCurrentUser();
         //Set the user's name in Firebase's DB
@@ -110,7 +122,12 @@ public final class Model {
         });
     }
 
-    //Add all shelters that meet the criteria to the activeShelters list
+    /**
+     * Add all shelters that meet the criteria to the activeShelters list
+     * @param gender The gender the shelter should support
+     * @param age The age range the shelter should support
+     * @param name Subset of text that the name should contain
+     */
     public void search(Gender gender, AgeRange age, String name) {
         activeShelters.clear();
         for (Shelter s : shelters) {
@@ -144,22 +161,29 @@ public final class Model {
         }
     }
 
-    //Make active shelters entire shelter list
+    /**
+     * Clears the last search, so that all shelters show up on the list/map
+     */
     public void resetActiveList() {
         activeShelters = new LinkedList<>(shelters);
     }
 
-    //Claims a certain amount of beds in a certain shelter
-    //Returns whether or not the claim is successful
-    public boolean claimBeds(int amount, Shelter shelter) {
+    /**
+     * Claims beds for the user in a shelter by connecting to the Firebase DB
+     * They can only claim beds if there are beds to be claimed and the user hasn't already claimed
+     * beds.
+     * @param amount How many beds to claim
+     * @param shelter Which shelter to claim them at
+     */
+    public void claimBeds(int amount, Shelter shelter) {
         final int numBeds = amount;
         final int newVacancy = shelter.getVacancy() - amount;
         if (newVacancy < 0) {
-            return false;
+            return;
         }
         final int index = shelters.indexOf(shelter);
         if (index < 0) {
-            return false;
+            return;
         }
         //Check if user already claimed beds
         String userEmail = mAuth.getCurrentUser().getEmail();
@@ -177,7 +201,7 @@ public final class Model {
                     break;
                 }
                 Long num = (Long) userInfo.get("numBeds");
-                int alreadyClaimed = num == null ? 0 : (num.intValue());
+                int alreadyClaimed = (num == null) ? 0 : (num.intValue());
                 //Only allow the user to claim beds if they have 0 beds claimed
                 if (alreadyClaimed == 0) {
                     //no beds claimed
@@ -188,8 +212,6 @@ public final class Model {
                     //Change user info in database
                     mDatabase.child("users").child(userID).child("shelterID").setValue(index);
                     mDatabase.child("users").child(userID).child("numBeds").setValue(numBeds);
-                } else {
-                    //beds already claimed
                 }
             }
 
@@ -198,8 +220,7 @@ public final class Model {
                 Log.w("Database", "loadPost:onCancelled", databaseError.toException());
             }
         }));
-        
-        return true;
+
     }
 
     //Creates a database listener.
@@ -228,6 +249,9 @@ public final class Model {
         });
     }
 
+    /**
+     * Releases any beds the current user has claimed in Firebase
+     */
     public void releaseBeds() {
         String userEmail = mAuth.getCurrentUser().getEmail();
         Query q = mDatabase.child("users").orderByChild("email").equalTo(userEmail);
@@ -244,13 +268,14 @@ public final class Model {
                     break;
                 }
                 Long num = (Long) userInfo.get("numBeds");
-                int claimed = num == null ? 0 : (num.intValue());
+                int claimed = (num == null) ? 0 : (num.intValue());
                 //If the user has more than 0 beds claimed, increase vacancy of released shelter
                 if (claimed != 0) {
                     Long shelterNum = (Long) userInfo.get("shelterID");
-                    int shelterID = shelterNum == null ? 0 : (shelterNum.intValue());
+                    int shelterID = (shelterNum == null) ? 0 : (shelterNum.intValue());
                     int newVacancy = shelters.get(shelterID).getVacancy() + claimed;
-                    mDatabase.child("shelters").child(shelterID + "").child("vacancy").setValue(newVacancy);
+                    mDatabase.child("shelters").child(shelterID + "").child("vacancy").
+                            setValue(newVacancy);
                 }
                 mDatabase.child("users").child(userID).child("numBeds").setValue(0);
             }

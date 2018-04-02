@@ -1,16 +1,15 @@
 package zepplins.zen.homelessassist.model;
 
 /**
- * Created by mayhul on 3/5/18.
+ * Different age ranges user can filter by
  */
-
 public enum AgeRange {
     FAMILIES("Family"),
     CHILDREN("Children"),
     YOUNG_ADULTS("Young Adult"),
     ANYONE("Anyone");
 
-    private String displayName;
+    private final String displayName;
 
     AgeRange (String displayName){
         this.displayName = displayName;

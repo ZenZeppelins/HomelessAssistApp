@@ -1,15 +1,14 @@
 package zepplins.zen.homelessassist.model;
 
 /**
- * Created by mayhul on 3/5/18.
+ * Gender options that user can filter by
  */
-
 public enum Gender {
     MALE("Male"),
     FEMALE("Female"),
     ANYONE("Anyone");
 
-    private String displayName;
+    private final String displayName;
 
     Gender (String displayName){
         this.displayName = displayName;

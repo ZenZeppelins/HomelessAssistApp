@@ -19,6 +19,9 @@ import zepplins.zen.homelessassist.R;
 import zepplins.zen.homelessassist.model.Model;
 import zepplins.zen.homelessassist.model.Shelter;
 
+/**
+ * Activity when user is looking at Map view
+ */
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
@@ -30,7 +33,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.searchMapFab);
+        FloatingActionButton fab = findViewById(R.id.searchMapFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,7 +43,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             }
         });
 
-        fab = (FloatingActionButton) findViewById(R.id.backMapFab);
+        fab = findViewById(R.id.backMapFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

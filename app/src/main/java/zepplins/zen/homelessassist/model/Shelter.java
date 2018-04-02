@@ -1,6 +1,8 @@
 package zepplins.zen.homelessassist.model;
 
-//Getters and setters for Shelters. Used by Firebase DB to load data
+/**
+ * Getters and setters for Shelters. Used by Firebase DB to load data
+ */
 public class Shelter {
     private String address;
     private double latitude;
@@ -12,6 +14,9 @@ public class Shelter {
     private int capacity;
     private int vacancy;
 
+    /**
+     * Empty constructor required for Firebase to use this class
+     */
     public Shelter() {
 
     }
