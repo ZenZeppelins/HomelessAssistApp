@@ -23,6 +23,7 @@ import zepplins.zen.homelessassist.model.Shelter;
  * Activity when user is looking at Map view
  */
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+    private int MAP_ZOOM = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         //Move camera to average lat/long of shelters
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latAvg, longAvg)));
         //11 found through experimentation
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(11));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(MAP_ZOOM));
     }
 }

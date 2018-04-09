@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -136,7 +135,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         //final necessary to be referenced by internal class
-        final FirebaseAuth auth = Model.getInstance().getAuthenticator();
+        final Model m = Model.getInstance();
+        final FirebaseAuth auth = m.getAuthenticator();
         final String displayName = name;
         final String email = _email;
         final String userType = _userType;
@@ -145,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
                 new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Model m = Model.getInstance();
                 //Check that the user is allowed to register as that userType
                 if (task.isSuccessful() && m.validateRegistration(userType, accountCode)) {
                     m.setUserDetails(email, displayName, userType);

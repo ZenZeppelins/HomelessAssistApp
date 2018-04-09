@@ -23,6 +23,8 @@ import java.util.Map;
  */
 public final class Model {
     private static Model _instance;
+    private static double GT_LAT = 33.7756;
+    private static double GT_LONG = -84.3963;
 
     /**
      * Returns an instance of the model class. Singleton pattern
@@ -137,15 +139,16 @@ public final class Model {
         activeShelters.clear();
         for (Shelter s : shelters) {
             //Check if gender doesn't match
+            String restrictions = s.getRestrictions();
             if (gender != null) {
-                if ((gender == Gender.MALE) && (s.getRestrictions().contains("Women"))) {
+                if ((gender == Gender.MALE) && (restrictions.contains("Women"))) {
                     continue;
-                } else if ((gender == Gender.FEMALE) && (s.getRestrictions().contains("Men"))) {
+                } else if ((gender == Gender.FEMALE) && (restrictions.contains("Men"))) {
                     continue;
                 }
             }
             //Check if age doesn't match
-            if (!isMatch(age, s.getRestrictions())) {
+            if (!isMatch(age, restrictions)) {
                 continue;
             }
             //Check if name doesn't match
@@ -315,7 +318,7 @@ public final class Model {
         for (Shelter s : activeShelters) {
             total += s.getLatitude();
         }
-        return activeShelters.isEmpty() ? 33.7756 : (total / activeShelters.size());
+        return (activeShelters.isEmpty() ? GT_LAT : (total / activeShelters.size()));
     }
 
     /**
@@ -327,7 +330,7 @@ public final class Model {
         for (Shelter s : activeShelters) {
             total += s.getLongitude();
         }
-        return activeShelters.isEmpty() ? -84.3963 : (total / activeShelters.size());
+        return activeShelters.isEmpty() ? GT_LONG : (total / activeShelters.size());
     }
 }
 
