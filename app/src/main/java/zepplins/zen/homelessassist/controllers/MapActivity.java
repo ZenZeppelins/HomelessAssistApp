@@ -72,7 +72,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
         //Calculate the average latitute and longitude
         double latAvg = m.averageLatitude();
-        double longAvg = m.averageLongitutde();
+        double longAvg = m.averageLongitude();
         //Move camera to average lat/long of shelters
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latAvg, longAvg)));
         //11 found through experimentation

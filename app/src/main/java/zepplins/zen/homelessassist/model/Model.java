@@ -140,17 +140,8 @@ public final class Model {
                 }
             }
             //Check if age doesn't match
-            if (age != null) {
-                if ((age == AgeRange.FAMILIES) &&
-                        (!s.getRestrictions().toLowerCase().contains("famil"))) {
-                    continue;
-                } else if ((age == AgeRange.CHILDREN) &&
-                        (!s.getRestrictions().toLowerCase().contains("child"))) {
-                    continue;
-                } else if ((age == AgeRange.YOUNG_ADULTS) &&
-                        (!s.getRestrictions().toLowerCase().contains("young"))) {
-                    continue;
-                }
+            if (!isMatch(age, s.getRestrictions())) {
+                continue;
             }
             //Check if name doesn't match
             if ((name != null) &&
@@ -159,6 +150,29 @@ public final class Model {
             }
             activeShelters.add(s);
         }
+    }
+
+    /**
+     * Checks if the given restriction fits the age range
+     * @param age The age range
+     * @param restrictions The restriction text for the shelter
+     * @return returns true if the age range matches the restrictions
+     */
+    private boolean isMatch(AgeRange age, String restrictions) {
+        if (age == null) {
+            return true;
+        }
+        if ((age == AgeRange.FAMILIES) &&
+                (!restrictions.toLowerCase().contains("famil"))) {
+            return false;
+        } else if ((age == AgeRange.CHILDREN) &&
+                (!restrictions.toLowerCase().contains("child"))) {
+            return false;
+        } else if ((age == AgeRange.YOUNG_ADULTS) &&
+                (!restrictions.toLowerCase().contains("young"))) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -303,7 +317,7 @@ public final class Model {
      * Calculates the average longitude of the active shelters
      * @return he average longitude of the shelters, or GT's long value if it's empty
      */
-    public double averageLongitutde() {
+    public double averageLongitude() {
         double total = 0;
         for (Shelter s : activeShelters) {
             total += s.getLongitude();
