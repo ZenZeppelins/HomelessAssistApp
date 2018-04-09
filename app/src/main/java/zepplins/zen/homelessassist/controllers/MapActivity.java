@@ -70,7 +70,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             googleMap.addMarker(new MarkerOptions().position(loc).
                     title(s.getShelterName()).snippet(snippet));
         }
-        //Calculate the average latitute and longitude
+        //Calculate the average latitude and longitude
         double latAvg = m.averageLatitude();
         double longAvg = m.averageLongitude();
         //Move camera to average lat/long of shelters

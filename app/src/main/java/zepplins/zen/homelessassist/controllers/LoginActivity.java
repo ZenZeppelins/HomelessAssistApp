@@ -122,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
                     Intent i = new Intent(getApplicationContext(), SheltersActivity.class);
                     startActivity(i);
                 } else {
-                    Log.d("Log In", task.getException().toString());
                     failedSignIn();
                 }
             }
@@ -153,7 +152,6 @@ public class LoginActivity extends AppCompatActivity {
                     Intent i = new Intent(getApplicationContext(), SheltersActivity.class);
                     startActivity(i);
                 } else {
-                    Log.d("Log In", task.getException().toString());
                     failedRegistration();
                 }
             }

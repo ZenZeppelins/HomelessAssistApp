@@ -24,6 +24,10 @@ import java.util.Map;
 public final class Model {
     private static Model _instance;
 
+    /**
+     * Returns an instance of the model class. Singleton pattern
+     * @return The one true model
+     */
     public static Model getInstance() {
         if (_instance == null) {
             _instance = new Model();
@@ -77,7 +81,8 @@ public final class Model {
         if ((user == null) || (code == null)) {
             return false;
         }
-        return ("User").equals(user) || (("Admin").equals(user) && code.equals(adminCode)) || (("Shelter Employee").equals(user) && code.equals(employeeCode));
+        return ("User").equals(user) || (("Admin").equals(user) && code.equals(adminCode)) ||
+                (("Shelter Employee").equals(user) && code.equals(employeeCode));
     }
 
     /**
@@ -310,7 +315,7 @@ public final class Model {
         for (Shelter s : activeShelters) {
             total += s.getLatitude();
         }
-        return activeShelters.isEmpty() ? 33.7756 : total / activeShelters.size();
+        return activeShelters.isEmpty() ? 33.7756 : (total / activeShelters.size());
     }
 
     /**
@@ -322,7 +327,7 @@ public final class Model {
         for (Shelter s : activeShelters) {
             total += s.getLongitude();
         }
-        return activeShelters.isEmpty() ? -84.3963 : total / activeShelters.size();
+        return activeShelters.isEmpty() ? -84.3963 : (total / activeShelters.size());
     }
 }
 
