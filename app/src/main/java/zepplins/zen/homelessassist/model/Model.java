@@ -286,5 +286,29 @@ public final class Model {
             }
         }));
     }
+
+    /**
+     * Calculates the average latitude of the active shelters
+     * @return The average latitude of shelters, or GT's lat value if it's empty
+     */
+    public double averageLatitude() {
+        double total = 0;
+        for (Shelter s : activeShelters) {
+            total += s.getLatitude();
+        }
+        return activeShelters.isEmpty() ? 33.7756 : total / activeShelters.size();
+    }
+
+    /**
+     * Calculates the average longitude of the active shelters
+     * @return he average longitude of the shelters, or GT's long value if it's empty
+     */
+    public double averageLongitutde() {
+        double total = 0;
+        for (Shelter s : activeShelters) {
+            total += s.getLongitude();
+        }
+        return activeShelters.isEmpty() ? -84.3963 : total / activeShelters.size();
+    }
 }
 

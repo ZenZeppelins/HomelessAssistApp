@@ -61,28 +61,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        List<Shelter> active = Model.getInstance().getActiveShelters();
-        double latTotal = 0;
-        double longTotal = 0;
-        int count = 0;
+        Model m = Model.getInstance();
+        List<Shelter> active = m.getActiveShelters();
         //For each shelter, load a marker at the location with the corresponding info
         for (Shelter s : active) {
             LatLng loc = new LatLng(s.getLatitude(), s.getLongitude());
             String snippet = "Phone: " + s.getPhoneNumber();
             googleMap.addMarker(new MarkerOptions().position(loc).
                     title(s.getShelterName()).snippet(snippet));
-            latTotal += s.getLatitude();
-            longTotal += s.getLongitude();
-            count++;
         }
         //Calculate the average latitute and longitude
-        double latAvg = latTotal / count;
-        double longAvg = longTotal / count;
-        //If no shelters are in active, set camera to Georgia Tech
-        if (active.isEmpty()) {
-            latAvg = 33.7756;
-            longAvg = -84.3963;
-        }
+        double latAvg = m.averageLatitude();
+        double longAvg = m.averageLongitutde();
         //Move camera to average lat/long of shelters
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latAvg, longAvg)));
         //11 found through experimentation
