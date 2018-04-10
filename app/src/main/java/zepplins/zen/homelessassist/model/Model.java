@@ -23,8 +23,8 @@ import java.util.Map;
  */
 public final class Model {
     private static Model _instance;
-    private static double GT_LAT = 33.7756;
-    private static double GT_LONG = -84.3963;
+    private static final double GT_LAT = 33.7756;
+    private static final double GT_LONG = -84.3963;
 
     /**
      * Returns an instance of the model class. Singleton pattern

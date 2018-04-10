@@ -23,7 +23,7 @@ import zepplins.zen.homelessassist.model.Shelter;
  * Activity when user is looking at Map view
  */
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
-    private int MAP_ZOOM = 11;
+    private final int MAP_ZOOM = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
