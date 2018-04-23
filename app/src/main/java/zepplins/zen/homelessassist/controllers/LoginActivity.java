@@ -157,6 +157,24 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    public void onForgotPasswordClicked(View view) {
+        String email = ((TextView) findViewById(R.id.email)).getText().toString();
+        if (email.isEmpty()) {
+            return;
+        }
+        Model m = Model.getInstance();
+        FirebaseAuth auth = m.getAuthenticator();
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            System.out.println("Email sent.");
+                        }
+                    }
+                });
+    }
+
     //What to do when a registration fails
     private void failedRegistration() {
         TextView failed = findViewById(R.id.registerFailed);

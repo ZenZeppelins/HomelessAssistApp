@@ -8,6 +8,7 @@
     <string name="prompt_code">Account Code</string>
     <string name="prompt_password">Password</string>
     <string name="title_activity_login">Log In</string>
+    <string name="forgotPassword">Reset Password</string>
     <string name="logInFailed">The log in failed!</string>
     <string name="registerFailed">The registration failed!</string>
     <string name="title_activity_shelters">Homeless Shelters</string>
